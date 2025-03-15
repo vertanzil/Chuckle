@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chuckle - Chuck Norris Jokes</title>
+        <script>
+    async function fetchJoke() {
+      try {
+        const response = await fetch("https://api.chucknorris.io/jokes/random");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const { icon_url, id, value } = data;
+        return { icon_url, id, value };
+      } catch (error) {
+        console.error("Error fetching joke:", error);
+        throw error;
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+  fetchJoke().then(joke => {
+    const speechBubble = document.querySelector(".speech-bubble");
+    if (speechBubble) {
+      speechBubble.textContent = joke.value;
+    }
+  }).catch(error => {
+    console.error("Failed to fetch joke:", error);
+    const speechBubble = document.querySelector(".speech-bubble");
+    if (speechBubble) {
+      speechBubble.textContent = "Chuck Norris is so funny he broke chuckle.?";
+    }
+  });
+});
+  </script>
+
+        <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f3f4f6;
+    }
+
+    .banner {
+      max-width: 600px;
+      width: 80%;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .speech-bubble {
+      position: relative;
+      background: #DF7943;
+      color: white;
+      border-radius: 10px;
+      padding: 15px;
+      max-width: 250px;
+      word-wrap: break-word;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      left: -10px;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-right-color: #0078d7;
+      border-left: 0;
+      margin-top: -10px;
+    }
+
+    .image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .speech-bubble::after {
+        position: absolute;
+        left: -10px;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-right-color: #0078d7;
+        border-left: 0;
+        margin-top: -10px;
+      }
+    }
+  </style>
+    </head>
+    <body>
+        <img src="banner.png" alt="Banner" class="banner">
+
+        <div class="container">
+            <img src="chuck.png" alt="Person" class="image">
+            <div class="speech-bubble">
+                Loading joke...
+            </div>
+        </div>
+    </body>
+</html>

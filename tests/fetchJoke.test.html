@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tests - fetchJoke</title>
+  <script>
+    function assert(condition, message) {
+      if (!condition) throw new Error(message || 'Assertion failed');
+    }
+
+    async function runTests() {
+      const results = [];
+
+      // Mock fetch success
+      const originalFetch = window.fetch;
+      window.fetch = async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({ icon_url: 'x', id: '1', value: 'joke' }),
+      });
+      try {
+        const joke = await window.fetchJoke();
+        assert(joke && joke.value === 'joke', 'Should return parsed joke');
+        results.push('PASS: fetchJoke returns joke on success');
+      } catch (e) {
+        results.push('FAIL: fetchJoke returns joke on success -> ' + e.message);
+      }
+
+      // Mock fetch failure
+      window.fetch = async () => ({ ok: false, status: 500, json: async () => ({}) });
+      let failed = false;
+      try {
+        await window.fetchJoke();
+      } catch (e) {
+        failed = true;
+      }
+      results.push(failed ? 'PASS: fetchJoke throws on HTTP error' : 'FAIL: fetchJoke throws on HTTP error');
+
+      // Restore fetch
+      window.fetch = originalFetch;
+
+      // Render results
+      const pre = document.getElementById('results');
+      pre.textContent = results.join('\n');
+      const hasFail = results.some(r => r.startsWith('FAIL'));
+      document.title = hasFail ? 'Tests FAILED' : 'Tests PASSED';
+    }
+
+    window.addEventListener('load', runTests);
+  </script>
+  <script src="../js/app.js"></script>
+</head>
+<body>
+  <pre id="results">Running tests...</pre>
+</body>
+</html>

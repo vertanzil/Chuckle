@@ -67,7 +67,13 @@
         gap: 12px;
         margin-top: 16px;
       }
-
+	  
+	  .footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	  }
       .refresh-btn {
         padding: 8px 12px;
         border: none;
@@ -110,6 +116,7 @@
           flex-direction: column;
           align-items: flex-start;
         }
+  }
       }
     </style>
   </head>
@@ -128,5 +135,9 @@
         Auto refresh every 5s
       </label>
     </div>
+	
+	<div class="footer" style="position:bottom;">
+	Made using <a href="https://api.chucknorris.io">Chuck Norris API</a>
+	<//div>
   </body>
 </html>

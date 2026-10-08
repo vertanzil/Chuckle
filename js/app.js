@@ -9,12 +9,9 @@
       const { icon_url, id, value } = data;
       return { icon_url, id, value };
     } catch (error) {
-      // Propagate error to caller
       throw error;
     }
   }
-
-  // Expose for tests
   window.fetchJoke = fetchJoke;
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -58,20 +55,14 @@
         }
       }
     }
-
-    // Initial fetch
     refreshJoke();
-
-    // Manual refresh
     if (refreshBtn) {
       refreshBtn.addEventListener("click", refreshJoke);
     }
-
-    // Auto refresh toggle
+	
     if (autoCb) {
       autoCb.addEventListener("change", () => {
         if (autoCb.checked) {
-          // Immediately refresh, then every 5 seconds
           refreshJoke();
           autoTimer = setInterval(refreshJoke, 5000);
         } else {
@@ -79,8 +70,7 @@
         }
       });
     }
-
-    // Clean up timer if the page is hidden/unloaded
+	
     window.addEventListener("beforeunload", clearAuto);
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
